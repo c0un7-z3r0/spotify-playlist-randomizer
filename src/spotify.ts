@@ -98,7 +98,7 @@ const getUserPlaylistByName = async (api: SpotifyWebApi, playlistName: string) =
 };
 
 export const getOrCreateUserPlaylistByName = async (api: SpotifyWebApi, playlistName: string) => {
-  const playlist = getUserPlaylistByName(api, playlistName);
+  const playlist = await getUserPlaylistByName(api, playlistName);
   if (playlist) return playlist;
 
   return createPlaylist(api, playlistName);
