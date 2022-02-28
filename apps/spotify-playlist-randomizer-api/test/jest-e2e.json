@@ -1,0 +1,23 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/test/(.*)": "<rootDir>/../libs/test/src/$1",
+    "@app/test": "<rootDir>/../libs/test/src",
+    "@app/nconf/(.*)": "<rootDir>/../libs/nconf/src/$1",
+    "@app/nconf": "<rootDir>/../libs/nconf/src",
+    "@app/spotify/(.*)": "<rootDir>/../libs/spotify/src/$1",
+    "@app/spotify": "<rootDir>/../libs/spotify/src",
+    "@app/jsondb/(.*)": "<rootDir>/../libs/jsondb/src/$1",
+    "@app/jsondb": "<rootDir>/../libs/jsondb/src"
+  }
+}

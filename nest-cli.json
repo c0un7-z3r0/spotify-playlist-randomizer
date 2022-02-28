@@ -1,0 +1,58 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/spotify-playlist-randomizer-api/src",
+  "projects": {
+    "nconf": {
+      "type": "library",
+      "root": "libs/nconf",
+      "entryFile": "index",
+      "sourceRoot": "libs/nconf/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/nconf/tsconfig.lib.json"
+      }
+    },
+    "spotify": {
+      "type": "library",
+      "root": "libs/spotify",
+      "entryFile": "index",
+      "sourceRoot": "libs/spotify/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/spotify/tsconfig.lib.json"
+      }
+    },
+    "jsondb": {
+      "type": "library",
+      "root": "libs/jsondb",
+      "entryFile": "index",
+      "sourceRoot": "libs/jsondb/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/jsondb/tsconfig.lib.json"
+      }
+    },
+    "spotify-playlist-randomizer-api": {
+      "type": "application",
+      "root": "apps/spotify-playlist-randomizer-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/spotify-playlist-randomizer-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/spotify-playlist-randomizer-api/tsconfig.app.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/spotify-playlist-randomizer-api/tsconfig.app.json"
+  },
+
+  "plugins": [
+    {
+      "name": "@nestjs/swagger",
+      "options": {
+        "introspectComments": true
+      }
+    }
+  ],
+
+  "monorepo": true,
+  "root": "apps/spotify-playlist-randomizer-api"
+}
