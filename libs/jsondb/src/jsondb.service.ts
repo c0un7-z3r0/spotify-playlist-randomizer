@@ -12,7 +12,7 @@ class ArtistRecord extends BaseRecord {
 
 export class PlaylistRecord extends BaseRecord {
   name: string;
-  playlistId: string;
+  id: string;
   artist: ArtistRecord;
 }
 
@@ -53,7 +53,7 @@ export class JsondbService {
     }
     this.db.push(`/db/${dbKey}/${id}`, {
       ...data,
-      playlistId: id,
+      id,
     });
     return record;
   }

@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { SpotifyService } from './spotify.service';
 
 @Module({
+  imports: [ConfigModule.forRoot()],
   providers: [SpotifyService],
   exports: [SpotifyService],
 })

@@ -28,6 +28,7 @@ export class PlaylistConfigService {
     this.jsondbService.add(DB_KEY, {
       ...createPlaylistConfigRecord,
       id: playlist.id,
+      name: playlist.name,
     });
   }
 

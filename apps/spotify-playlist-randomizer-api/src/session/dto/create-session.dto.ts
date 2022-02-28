@@ -13,10 +13,4 @@ export class CreateSessionDto {
     type: String,
   })
   clientSecret: string;
-  @ApiPropertyOptional({
-    description: 'Spotify UserId',
-    example: 'test-userid',
-    type: String,
-  })
-  userId?: string;
 }
