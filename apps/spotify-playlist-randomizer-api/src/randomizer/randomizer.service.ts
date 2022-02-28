@@ -26,7 +26,6 @@ export class RandomizerService {
     const unknownAlbums = albums.filter(
       (album) => !prevAlbumIds.includes(album.id),
     );
-
     if (unknownAlbums.length <= 0) {
       return null;
     }
