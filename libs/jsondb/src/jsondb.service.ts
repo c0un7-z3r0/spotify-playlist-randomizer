@@ -4,6 +4,7 @@ import { JsonDB } from 'node-json-db';
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig';
 import { ConfigService } from '@nestjs/config';
 import { HealthCheckResult, HealthIndicator } from '@nestjs/terminus';
+
 class BaseRecord {
   id: string;
 }
@@ -31,6 +32,7 @@ export class JsondbService {
   private db: JsonDB;
   private readonly logger = new Logger(JsondbService.name);
   private dbPath: string = '';
+
   constructor(private configService: ConfigService) {
     this.dbPath = `${this.configService.get<string>('DB_PATH') ?? 'data'}/db`;
 
