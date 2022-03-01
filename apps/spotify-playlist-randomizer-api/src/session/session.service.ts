@@ -55,8 +55,11 @@ export class SessionService {
   }
 
   private getUserData(): UserSessionDbEntry {
-    const { userSession } =
-      this.jsondbService.getAll<UserSessionDbEntry>(DB_KEY);
+    const userSession = this.jsondbService.getById<UserSessionDbEntry>(
+      DB_KEY,
+      DEFAULT_ID,
+    );
+    this.logger.log(userSession);
     return userSession;
   }
 
@@ -72,15 +75,11 @@ export class SessionService {
     return this.generateOauthUrl();
   }
 
-  createUserSession({
-    clientId,
-    clientSecret,
-    userId = DEFAULT_ID,
-  }: CreateSessionDto) {
+  createUserSession({ clientId, clientSecret }: CreateSessionDto) {
     this.spotifyService.init({ clientId, clientSecret });
 
     this.jsondbService.add<UserSessionDbEntry>(DB_KEY, {
-      id: userId,
+      id: DEFAULT_ID,
       clientId,
       clientSecret,
     });

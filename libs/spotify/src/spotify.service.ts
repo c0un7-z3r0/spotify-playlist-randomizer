@@ -1,4 +1,5 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable, Logger, Scope } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import SpotifyWebApi from 'spotify-web-api-node';
 
 const REQUEST_LIMIT = 50;
@@ -42,6 +43,9 @@ function logExceptions<T extends any[], U>(
 export class SpotifyService {
   private api: SpotifyWebApi;
   private initialised = false;
+  private readonly logger = new Logger(SpotifyService.name);
+
+  constructor(private configService: ConfigService) {}
 
   init({
     clientId,
@@ -49,8 +53,14 @@ export class SpotifyService {
     accessToken,
     refreshToken,
   }: SpotifyServiceConfig) {
+    const redirectUri = `${this.configService.get<string>(
+      'BASE_PATH',
+    )}/session/callback`;
+    this.logger.log(`Using redirectUri ${redirectUri}`);
     this.api = new SpotifyWebApi({
-      redirectUri: 'http://localhost:3000/session/callback',
+      redirectUri: `${this.configService.get<string>(
+        'BASE_PATH',
+      )}/session/callback`,
       clientId,
       clientSecret,
       accessToken,

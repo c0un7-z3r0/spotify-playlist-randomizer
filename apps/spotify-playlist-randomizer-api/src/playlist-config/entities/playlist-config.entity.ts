@@ -1,6 +1,7 @@
-export class PlaylistConfig{
+export class PlaylistConfig {
   artistId: string;
-  playlistId: string;
+  id: string;
+  name: string;
   prevAlbumIds: string[];
   currentAlbumId: string;
 }
