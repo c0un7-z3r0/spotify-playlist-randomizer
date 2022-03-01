@@ -4,9 +4,9 @@ import { Injectable, Scope, Body, Logger } from '@nestjs/common';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { CreateSessionDto } from './dto/create-session.dto';
 
-const DB_KEY = 'sessions';
-const DEFAULT_ID = 'userSession';
-interface UserSessionDbEntry {
+export const DB_KEY = 'sessions';
+export const DEFAULT_ID = 'userSession';
+export interface UserSessionDbEntry {
   id: string;
   clientId: string;
   clientSecret: string;
@@ -23,6 +23,7 @@ export class SessionService {
   constructor(
     private readonly spotifyService: SpotifyService,
     private readonly jsondbService: JsondbService,
+
   ) {
     try {
       const userSession = this.jsondbService.getById<UserSessionDbEntry>(
