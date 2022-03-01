@@ -13,9 +13,9 @@ class ArtistRecord extends BaseRecord {
 }
 
 export class PlaylistRecord extends BaseRecord {
-    name: string;
-    id: string;
-    artist: ArtistRecord;
+  name: string;
+  id: string;
+  artist: ArtistRecord;
 }
 
 export class PlaylistsData {
