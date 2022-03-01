@@ -26,7 +26,6 @@ export class RandomizerService {
     const unknownAlbums = albums.filter(
       (album) => !prevAlbumIds.includes(album.id),
     );
-    unknownAlbums.forEach((a) => console.log(a.name));
 
     if (unknownAlbums.length <= 0) {
       return null;
@@ -69,7 +68,7 @@ export class RandomizerService {
     );
     const randomAlbum = this.getRandomAlbum(albums, prevAlbumIds);
     if (!randomAlbum) {
-      return new ImATeapotException('No random album could be found');
+      return new ImATeapotException('No random album could be found.');
     }
 
     const trackIds = await this.spotifyService.getAllTrackIdsOfAlbum(
