@@ -26,19 +26,6 @@ interface SpotifyServiceConfig {
   refreshToken?: string;
 }
 
-function logExceptions<T extends any[], U>(
-  func: (...args: T) => PromiseLike<U>,
-): (...args: T) => Promise<U> {
-  return async (...args) => {
-    try {
-      return await func(...args);
-    } catch (err) {
-      console.log(func.name + ' caused an error');
-      throw err;
-    }
-  };
-}
-
 @Injectable()
 export class SpotifyService {
   private api: SpotifyWebApi;
@@ -67,6 +54,7 @@ export class SpotifyService {
       refreshToken,
     });
     this.initialised = true;
+    this.logger.debug(`Spotify Client init done using clientId=${clientId}`);
     return this.api;
   }
 
@@ -97,6 +85,7 @@ export class SpotifyService {
         total: albums.body.total,
       };
     } catch (err: any) {
+      this.logger.error({ msg: err.message, status: err.statusCode });
       if (err.statusCode === 401) {
         await this.handle401();
         return this.getArtistAlbum(artistId, offset, limit);
@@ -119,6 +108,7 @@ export class SpotifyService {
         total: tracksResponse.body.total,
       };
     } catch (err: any) {
+      this.logger.error({ msg: err.message, status: err.statusCode });
       if (err.statusCode === 401) {
         await this.handle401();
         return this.getAlbumTracks(albumId, offset, limit);
@@ -140,7 +130,7 @@ export class SpotifyService {
       const newLimit = Math.min(response.total - merged.length, REQUEST_LIMIT);
       return this.getAllTracksOfAlbum(albumId, newOffset, newLimit, merged);
     }
-    console.log(` - ✅ Done (${merged.length}/${response.total} Tracks)`);
+    this.logger.debug(` - ✅ Done (${merged.length}/${response.total} Tracks)`);
     return merged;
   };
 
@@ -153,7 +143,7 @@ export class SpotifyService {
   };
 
   private handle401 = async () => {
-    console.info('♻️ Refreshing tokens.');
+    this.logger.debug('♻️ Refreshing tokens needed.');
 
     this.updateAccessAndRefreshToken(await this.refreshTokens());
   };
@@ -173,13 +163,13 @@ export class SpotifyService {
       const newLimit = Math.min(response.total - merged.length, REQUEST_LIMIT);
       return this.getAllAlbumsOfArtist(artistId, newOffset, newLimit, merged);
     }
-    console.log(` - ✅ Done (${merged.length}/${response.total} Albums)`);
+    this.logger.debug(` - ✅ Done (${merged.length}/${response.total} Albums)`);
     return merged;
   };
 
   private createPlaylist = async (playlistName: string) => {
     try {
-      console.log(
+      this.logger.debug(
         `⚠️ Playlist "${playlistName}" did not exist for user. Will create a new playlist.`,
       );
       const createUserPlaylistResponse = await this.api.createPlaylist(
@@ -191,6 +181,7 @@ export class SpotifyService {
       );
       return createUserPlaylistResponse.body;
     } catch (err: any) {
+      this.logger.error({ msg: err.message, status: err.statusCode });
       if (err.statusCode === 401) {
         await this.handle401();
         return this.createPlaylist(playlistName);
@@ -205,6 +196,7 @@ export class SpotifyService {
         (pl) => pl.name === playlistName,
       );
     } catch (err: any) {
+      this.logger.error({ msg: err.message, status: err.statusCode });
       if (err.statusCode === 401) {
         await this.handle401();
         return this.getUserPlaylistByName(playlistName);
@@ -241,6 +233,7 @@ export class SpotifyService {
         await this.api.replaceTracksInPlaylist(playlistId, trackIds);
       }
     } catch (err: any) {
+      this.logger.error({ msg: err.message, status: err.statusCode });
       if (err.statusCode === 401) {
         await this.handle401();
         return this.replaceTracksInPlaylist(playlistId, trackIds);
@@ -250,7 +243,7 @@ export class SpotifyService {
 
   refreshTokens = async () => {
     try {
-      console.log('refreshing tokens');
+      this.logger.debug('refreshing token');
       const grant = await this.api.refreshAccessToken();
 
       return {
@@ -258,9 +251,9 @@ export class SpotifyService {
         refreshToken: grant.body['refresh_token'],
       };
     } catch (err: any) {
-      console.debug('🔎', err.message);
+      this.logger.error({ msg: err.message, status: err.statusCode });
       throw new Error(
-        '🔴 Failed to refresh access token. Please generate new tokens`',
+        '🔴 Failed to refresh access token. Please generate new tokens.`',
       );
     }
   };
