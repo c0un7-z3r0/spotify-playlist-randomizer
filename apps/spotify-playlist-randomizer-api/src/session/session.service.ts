@@ -23,7 +23,6 @@ export class SessionService {
   constructor(
     private readonly spotifyService: SpotifyService,
     private readonly jsondbService: JsondbService,
-
   ) {
     try {
       const userSession = this.jsondbService.getById<UserSessionDbEntry>(
@@ -60,12 +59,11 @@ export class SessionService {
       DB_KEY,
       DEFAULT_ID,
     );
-    this.logger.log(userSession);
     return userSession;
   }
 
-  async getOauthUrl() {
-    if (this.spotifyService.isInitialised) {
+  getOauthUrl() {
+    if (!this.spotifyService.isInitialised) {
       const { clientId, clientSecret } = this.getUserData();
 
       this.spotifyService.init({
